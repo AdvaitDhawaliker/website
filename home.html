@@ -1,0 +1,1030 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VASDHAVITRA – A Woven Breeze | Sustainable Upcycled Hand Fans</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Playfair Display & Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, setDoc, doc, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        // PASTE YOUR FIREBASE CONFIG HERE
+        const firebaseConfig = {
+  apiKey: "AIzaSyAeS1uWLuEYaBLUeLm6vHUUXkjHxLzyK4g",
+  authDomain: "vasdhavitra.firebaseapp.com",
+  projectId: "vasdhavitra",
+  storageBucket: "vasdhavitra.firebasestorage.app",
+  messagingSenderId: "1088106081732",
+  appId: "1:1088106081732:web:8b9d6c2814dc31b1b20891"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.firebaseDoc = doc;
+        window.firebaseSetDoc = setDoc;
+        window.firebaseCollection = collection;
+        window.firebaseAddDoc = addDoc;
+        window.firebaseGetDocs = getDocs;
+    </script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fcfbfa',
+                            100: '#f4efe6',
+                            200: '#e6dcc6',
+                            300: '#d0c2a2',
+                            600: '#795548',
+                            700: '#5d4037',
+                            800: '#4e342e',
+                            900: '#3e2723'
+                        },
+                        accent: {
+                            500: '#c29b38',
+                            600: '#a37f28'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #fcfbfa; color: #3e2723; }
+        h1, h2, h3, .font-serif { font-family: 'Playfair Display', serif; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f4efe6; }
+        ::-webkit-scrollbar-thumb { background: #d0c2a2; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb-hover { background: #795548; }
+    </style>
+</head>
+<body class="bg-brand-50 text-brand-900 antialiased selection:bg-brand-200 selection:text-brand-900 flex flex-col min-h-screen">
+
+    <!-- Notification Toast Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- Announcement Bar -->
+    <div class="bg-brand-900 text-brand-100 text-xs sm:text-sm py-2 px-4 text-center font-medium tracking-wide flex items-center justify-center space-x-2">
+        <i class="fa-solid fa-leaf text-accent-500"></i>
+        <span>Handcrafted from Pre-Loved Sarees & Surplus Textiles. Free shipping across India on orders over ₹1,499!</span>
+        <i class="fa-solid fa-fan text-accent-500 animate-spin" style="animation-duration: 6s;"></i>
+    </div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-brand-50/95 backdrop-blur-md border-b border-brand-200 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+            
+            <!-- Mobile Menu Toggle & Logo -->
+            <div class="flex items-center space-x-3 sm:space-x-4">
+                <button id="mobile-menu-btn" onclick="toggleMobileMenu()" class="md:hidden text-brand-900 hover:text-brand-700 focus:outline-none p-2 rounded-lg">
+                    <i class="fa-solid fa-bars text-xl"></i>
+                </button>
+                <a href="#" onclick="showSection('home')" class="flex items-center space-x-3 group">
+                    <div class="w-12 h-12 rounded-full overflow-hidden border border-brand-300 bg-white flex items-center justify-center shadow-md group-hover:scale-105 transition-transform shrink-0">
+                        <img src="logo.jpeg" alt="Vasdhavitra Logo" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/100x100/f4efe6/3e2723?text=V'">
+                    </div>
+                    <div>
+                        <span class="text-lg sm:text-2xl font-serif font-bold tracking-wider text-brand-900">VASDHAVITRA</span>
+                        <span class="block text-[10px] tracking-[0.2em] uppercase text-brand-600 font-semibold">A Woven Breeze</span>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Desktop Nav Links -->
+            <nav class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wide">
+                <a href="#" onclick="showSection('home')" class="nav-link text-brand-900 hover:text-brand-600 transition-colors py-2 border-b-2 border-transparent hover:border-brand-600">Home</a>
+                <a href="#" onclick="showSection('shop')" class="nav-link text-brand-900 hover:text-brand-600 transition-colors py-2 border-b-2 border-transparent hover:border-brand-600">The Collection</a>
+                <a href="#" onclick="showSection('story')" class="nav-link text-brand-900 hover:text-brand-600 transition-colors py-2 border-b-2 border-transparent hover:border-brand-600">Our Story</a>
+                <a href="#" onclick="showSection('sustainability')" class="nav-link text-brand-900 hover:text-brand-600 transition-colors py-2 border-b-2 border-transparent hover:border-brand-600">Sustainability</a>
+            </nav>
+
+            <!-- Actions: Cart, User Auth, Admin -->
+            <div class="flex items-center space-x-3 sm:space-x-5">
+                <!-- Cart Button -->
+                <button onclick="toggleCartDrawer(true)" class="relative p-2.5 rounded-full hover:bg-brand-100 transition-colors text-brand-900" aria-label="Shopping Cart">
+                    <i class="fa-solid fa-bag-shopping text-xl"></i>
+                    <span id="cart-badge" class="absolute -top-1 -right-1 bg-brand-700 text-white text-[11px] font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-sm">0</span>
+                </button>
+
+                <!-- User Account Dropdown -->
+                <div id="user-account-container" class="relative">
+                    <button onclick="toggleUserDropdown()" class="flex items-center space-x-2 py-1.5 px-3 rounded-full border border-brand-200 hover:border-brand-900 bg-white shadow-sm transition-all text-sm font-medium text-brand-900">
+                        <i class="fa-regular fa-user text-brand-700"></i>
+                        <span id="user-display-name" class="hidden sm:inline max-w-[120px] truncate">Account</span>
+                        <i class="fa-solid fa-chevron-down text-xs text-brand-600"></i>
+                    </button>
+                    <!-- User Dropdown Menu -->
+                    <div id="user-dropdown" class="hidden absolute right-0 mt-2 w-64 bg-white rounded-2xl shadow-xl border border-brand-200 py-2 z-50">
+                        <div id="dropdown-guest-links">
+                            <a href="index.html" class="w-full text-left px-4 py-2.5 text-sm text-brand-900 hover:bg-brand-100 font-medium flex items-center space-x-2">
+                                <i class="fa-solid fa-right-to-bracket text-brand-700 w-5"></i><span>Consumer Login / Signup</span>
+                            </a>
+                            <div class="border-t border-brand-200 my-1"></div>
+                            <a href="admin-login.html" class="w-full text-left px-4 py-2.5 text-sm text-brand-900 hover:bg-brand-100 font-medium flex items-center space-x-2">
+                                <i class="fa-solid fa-shield-halved text-brand-800 w-5"></i><span>Admin Portal Login</span>
+                            </a>
+                        </div>
+                        <div id="dropdown-user-links" class="hidden">
+                            <div class="px-4 py-2 border-b border-brand-100">
+                                <p class="text-xs text-brand-600">Signed in as</p>
+                                <p id="dropdown-user-email" class="text-xs font-bold text-brand-900 truncate">user@example.com</p>
+                                <span class="inline-block mt-1 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-800"><i class="fa-solid fa-circle-check mr-1"></i> Email Verified</span>
+                            </div>
+                            <button onclick="toggleAccountModal()" class="w-full text-left px-4 py-2.5 text-sm text-brand-900 hover:bg-brand-100 flex items-center space-x-2">
+                                <i class="fa-solid fa-address-card text-brand-700 w-5"></i><span>My Account & Address</span>
+                            </button>
+                            <button onclick="showSection('orders')" class="w-full text-left px-4 py-2.5 text-sm text-brand-900 hover:bg-brand-100 flex items-center space-x-2">
+                                <i class="fa-solid fa-box-open text-brand-700 w-5"></i><span>My Orders & Tracking</span>
+                            </button>
+                            <div class="border-t border-brand-200 my-1"></div>
+                            <button onclick="logoutUser()" class="w-full text-left px-4 py-2.5 text-sm text-red-700 hover:bg-red-50 flex items-center space-x-2">
+                                <i class="fa-solid fa-right-from-bracket w-5"></i><span>Sign Out</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Menu Drawer -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-b border-brand-200 px-4 pt-2 pb-6 space-y-3 shadow-lg">
+            <a href="#" onclick="showSection('home'); toggleMobileMenu();" class="block py-2 text-brand-900 font-medium hover:text-brand-600 border-b border-brand-100">Home</a>
+            <a href="#" onclick="showSection('shop'); toggleMobileMenu();" class="block py-2 text-brand-900 font-medium hover:text-brand-600 border-b border-brand-100">The Collection</a>
+            <a href="#" onclick="showSection('story'); toggleMobileMenu();" class="block py-2 text-brand-900 font-medium hover:text-brand-600 border-b border-brand-100">Our Story</a>
+            <a href="#" onclick="showSection('sustainability'); toggleMobileMenu();" class="block py-2 text-brand-900 font-medium hover:text-brand-600 border-b border-brand-100">Sustainability</a>
+            <div class="pt-2 flex flex-col space-y-2">
+                <a href="index.html" class="w-full py-2.5 px-4 bg-brand-100 text-brand-900 rounded-xl text-sm font-semibold text-center">Consumer Login / Signup</a>
+                <a href="admin-login.html" class="w-full py-2.5 px-4 bg-brand-900 text-white rounded-xl text-sm font-semibold flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-shield-halved text-accent-500"></i><span>Admin Portal Login</span>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="flex-grow">
+
+        <!-- SECTION: HOME -->
+        <section id="section-home" class="page-section">
+            <!-- Hero Banner -->
+            <div class="relative bg-brand-900 text-brand-50 overflow-hidden py-20 lg:py-28">
+                <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#d0c2a2_1px,transparent_1px)] [background-size:24px_24px]"></div>
+                
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                        <div class="lg:col-span-7 space-y-6 text-center lg:text-left">
+                            <div class="inline-flex items-center space-x-2 bg-brand-800 border border-brand-200/20 px-4 py-1.5 rounded-full text-brand-200 text-xs sm:text-sm font-medium tracking-wide">
+                                <i class="fa-solid fa-fan text-accent-500"></i>
+                                <span>VASDHAVITRA · A Woven Breeze</span>
+                            </div>
+                            <h1 class="text-4xl sm:text-6xl lg:text-7xl font-serif font-bold tracking-tight text-white leading-tight">
+                                Where Tradition Meets <span class="text-brand-200 italic">Sustainability.</span>
+                            </h1>
+                            <p class="text-brand-200 text-base sm:text-lg max-w-2xl font-light leading-relaxed mx-auto lg:mx-0">
+                                Discover handcrafted fabric hand fans made from upcycled sarees and surplus textiles. We transform existing fabrics into beautiful, practical accessories that celebrate creativity, traditional charm, and mindful living.
+                            </p>
+                            <div class="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-3 sm:space-y-0 sm:space-x-4 pt-4">
+                                <button onclick="showSection('shop')" class="w-full sm:w-auto px-8 py-4 bg-brand-100 hover:bg-white text-brand-900 font-bold rounded-xl shadow-lg transition-all flex items-center justify-center space-x-3">
+                                    <span>Explore Collection</span>
+                                    <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                                <button onclick="showSection('story')" class="w-full sm:w-auto px-8 py-4 bg-brand-800 hover:bg-brand-700 text-brand-100 border border-brand-700 font-semibold rounded-xl transition-all flex items-center justify-center space-x-2">
+                                    <span>Our Story & Mission</span>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Hero Visual -->
+                        <div class="lg:col-span-5 flex justify-center">
+                            <div class="relative w-full max-w-md bg-brand-800 p-3 rounded-3xl shadow-2xl border border-brand-700">
+                                <div class="bg-brand-900 rounded-2xl overflow-hidden aspect-[4/5] relative">
+                                    <img src="image_fbad77.jpg" alt="Vasdhavitra Handcrafted Fans" class="w-full h-full object-cover opacity-95" onerror="this.src='https://placehold.co/600x750/3e2723/e6dcc6?text=VASDHAVITRA'">
+                                    <div class="absolute inset-0 bg-gradient-to-t from-brand-900 via-transparent to-transparent opacity-80"></div>
+                                    <div class="absolute bottom-6 left-6 right-6 text-white space-y-1">
+                                        <span class="text-xs uppercase tracking-widest text-brand-200 font-semibold">Handcrafted With Love</span>
+                                        <h3 class="text-xl font-serif font-bold">Choose your style. Carry your story.</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Value Propositions -->
+            <div class="bg-brand-100 py-12 border-y border-brand-200">
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="flex items-start space-x-4 bg-white p-6 rounded-2xl shadow-sm border border-brand-200">
+                            <div class="w-12 h-12 rounded-xl bg-brand-900 text-brand-100 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-recycle"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-serif font-bold text-lg text-brand-900 mb-1">Upcycled Sarees</h3>
+                                <p class="text-xs text-brand-600 leading-relaxed">Every fabric deserves a second life. We transform pre-loved sarees into wearable art.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4 bg-white p-6 rounded-2xl shadow-sm border border-brand-200">
+                            <div class="w-12 h-12 rounded-xl bg-brand-900 text-brand-100 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-hands-holding"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-serif font-bold text-lg text-brand-900 mb-1">Traditional Artisans</h3>
+                                <p class="text-xs text-brand-600 leading-relaxed">Meticulously handcrafted by skilled generational artisans preserving textile heritage.</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4 bg-white p-6 rounded-2xl shadow-sm border border-brand-200">
+                            <div class="w-12 h-12 rounded-xl bg-brand-900 text-brand-100 flex items-center justify-center text-xl shrink-0">
+                                <i class="fa-solid fa-seedling"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-serif font-bold text-lg text-brand-900 mb-1">Mindful Living</h3>
+                                <p class="text-xs text-brand-600 leading-relaxed">A little breeze, a beautiful story, and a greener choice for festivals and special occasions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Products -->
+            <section class="py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                    <div>
+                        <span class="text-xs uppercase tracking-[0.2em] font-bold text-brand-600 mb-2 block">Curated Collection</span>
+                        <h2 class="text-3xl sm:text-4xl font-serif font-bold text-brand-900">Breathe Tradition. Choose Sustainability.</h2>
+                    </div>
+                    <button onclick="showSection('shop')" class="mt-4 md:mt-0 text-brand-900 hover:text-brand-600 font-semibold text-sm flex items-center space-x-2 group">
+                        <span>View All Hand Fans</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </button>
+                </div>
+
+                <div id="home-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <!-- Populated via JS -->
+                </div>
+            </section>
+        </section>
+
+        <!-- SECTION: SHOP -->
+        <section id="section-shop" class="page-section hidden py-16">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-3xl mx-auto mb-12 space-y-4">
+                    <span class="text-xs uppercase tracking-[0.2em] font-bold text-brand-600">The Handcrafted Catalog</span>
+                    <h1 class="text-3xl sm:text-5xl font-serif font-bold text-brand-900">Upcycled Saree Hand Fans</h1>
+                    <p class="text-brand-600 text-sm sm:text-base">Choose your style, carry your story. Each fan is one-of-a-kind with unique colors and patterns.</p>
+                </div>
+
+                <!-- Filters -->
+                <div class="flex flex-wrap items-center justify-center gap-3 mb-10" id="shop-filters">
+                    <button onclick="filterProducts('all')" class="filter-btn px-5 py-2 rounded-full text-xs font-semibold bg-brand-900 text-white transition-all shadow-sm">All Fans</button>
+                    <button onclick="filterProducts('Banarasi')" class="filter-btn px-5 py-2 rounded-full text-xs font-semibold bg-white text-brand-900 border border-brand-200 hover:border-brand-900 transition-all shadow-sm">Banarasi Silk</button>
+                    <button onclick="filterProducts('Zardozi')" class="filter-btn px-5 py-2 rounded-full text-xs font-semibold bg-white text-brand-900 border border-brand-200 hover:border-brand-900 transition-all shadow-sm">Vintage Zardozi</button>
+                    <button onclick="filterProducts('Patola')" class="filter-btn px-5 py-2 rounded-full text-xs font-semibold bg-white text-brand-900 border border-brand-200 hover:border-brand-900 transition-all shadow-sm">Sunset Patola</button>
+                    <button onclick="filterProducts('Chanderi')" class="filter-btn px-5 py-2 rounded-full text-xs font-semibold bg-white text-brand-900 border border-brand-200 hover:border-brand-900 transition-all shadow-sm">Eco-Chanderi</button>
+                </div>
+
+                <div id="shop-product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: OUR STORY -->
+        <section id="section-story" class="page-section hidden py-16">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-16">
+                <div class="text-center space-y-4 max-w-3xl mx-auto">
+                    <span class="text-xs uppercase tracking-[0.2em] font-bold text-brand-600">Our Heritage & Mission</span>
+                    <h1 class="text-4xl sm:text-5xl font-serif font-bold text-brand-900">Breathe Tradition. Choose Sustainability.</h1>
+                    <p class="text-brand-600 text-base leading-relaxed">
+                        At VASDHAVITRA, we believe every fabric deserves a second life. We transform pre-loved sarees and surplus textiles into beautiful handcrafted fabric hand fans, combining traditional charm, creativity, and sustainability.
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+                    <div class="rounded-3xl overflow-hidden shadow-xl border border-brand-200 aspect-[4/5] relative">
+                        <img src="image_fbad77.jpg" alt="Vasdhavitra Story" class="w-full h-full object-cover" onerror="this.src='https://placehold.co/600x750/f4efe6/3e2723?text=VASDHAVITRA'">
+                        <div class="absolute inset-0 bg-gradient-to-t from-brand-900/60 to-transparent"></div>
+                        <div class="absolute bottom-6 left-6 text-white">
+                            <p class="text-sm font-serif italic text-brand-200">"A little breeze, a beautiful story, and a greener choice."</p>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <h3 class="text-2xl font-serif font-bold text-brand-900">Celebrating Indian Textile Heritage</h3>
+                        <p class="text-brand-600 text-sm leading-relaxed">
+                            Each fan celebrates the beauty of Indian textiles with unique colours and patterns. Whether you are looking for a stylish everyday accessory or a thoughtful gift for festivals and special occasions, our fans bring together tradition and mindful living.
+                        </p>
+                        <p class="text-brand-600 text-sm leading-relaxed">
+                            By giving existing fabrics a new purpose, we aim to encourage eco-conscious choices and contribute to a greener future.
+                        </p>
+                        <div class="p-6 bg-brand-100 rounded-2xl border-l-4 border-brand-700 space-y-2">
+                            <h4 class="font-serif font-bold text-brand-900">The Upcycling Promise</h4>
+                            <p class="text-xs text-brand-600">Sourced from authentic vintage sarees and artisan surplus, every piece saves precious fabric from landfills while supporting generational weavers.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: SUSTAINABILITY -->
+        <section id="section-sustainability" class="page-section hidden py-16">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+                <div class="text-center max-w-3xl mx-auto space-y-4">
+                    <span class="text-xs uppercase tracking-[0.2em] font-bold text-brand-600">Eco-Conscious Impact</span>
+                    <h1 class="text-4xl sm:text-5xl font-serif font-bold text-brand-900">Green Living & Craft 💚</h1>
+                    <p class="text-brand-600 text-base">Discover the beauty of upcycled fabrics — sustainable cooling with timeless elegance.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-brand-200 text-center space-y-4">
+                        <div class="w-14 h-14 bg-brand-900 text-brand-100 rounded-full flex items-center justify-center text-2xl mx-auto shadow-md">
+                            <i class="fa-solid fa-recycle"></i>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-brand-900">Zero Fabric Waste</h3>
+                        <p class="text-xs text-brand-600 leading-relaxed">Repurposing pre-loved sarees and textile surplus into exquisite functional accessories.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-brand-200 text-center space-y-4">
+                        <div class="w-14 h-14 bg-brand-900 text-brand-100 rounded-full flex items-center justify-center text-2xl mx-auto shadow-md">
+                            <i class="fa-solid fa-tree"></i>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-brand-900">Natural Bamboo Frames</h3>
+                        <p class="text-xs text-brand-600 leading-relaxed">Built with sustainably harvested bamboo and traditional hand-riveted frames.</p>
+                    </div>
+                    <div class="bg-white p-8 rounded-2xl shadow-sm border border-brand-200 text-center space-y-4">
+                        <div class="w-14 h-14 bg-brand-900 text-brand-100 rounded-full flex items-center justify-center text-2xl mx-auto shadow-md">
+                            <i class="fa-solid fa-hands-holding-child"></i>
+                        </div>
+                        <h3 class="font-serif font-bold text-xl text-brand-900">Fair Artisanal Wages</h3>
+                        <p class="text-xs text-brand-600 leading-relaxed">Supporting skilled home-based artisans with fair compensation and safe conditions.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION: CUSTOMER ORDERS & TRACKING -->
+        <section id="section-orders" class="page-section hidden py-16">
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+                <div class="flex items-center justify-between border-b border-brand-200 pb-6">
+                    <div>
+                        <span class="text-xs uppercase tracking-[0.2em] font-bold text-brand-600">Consumer Account</span>
+                        <h1 class="text-3xl font-serif font-bold text-brand-900">My Orders & Live Status</h1>
+                    </div>
+                    <button onclick="showSection('shop')" class="px-5 py-2.5 bg-brand-900 text-white rounded-xl text-xs font-semibold hover:bg-brand-800 transition-all">
+                        Continue Shopping 🪭
+                    </button>
+                </div>
+                <div id="customer-orders-list" class="space-y-6">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FLIPKART-STYLE MY ACCOUNT MODAL -->
+    <div id="account-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-brand-200 relative">
+            <button onclick="toggleAccountModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-brand-100 hover:bg-brand-200 text-brand-900 flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="p-8 space-y-6">
+                <div class="flex items-center space-x-3 border-b border-brand-100 pb-4">
+                    <div class="w-12 h-12 rounded-full bg-brand-900 text-brand-200 flex items-center justify-center text-xl font-bold">
+                        👤
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-serif font-bold text-brand-900">My Account Profile</h2>
+                        <p class="text-xs text-brand-600">Manage your shipping address, phone number & details</p>
+                    </div>
+                </div>
+                
+                <form onsubmit="handleAccountUpdate(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-brand-600 mb-1">Full Name</label>
+                        <input type="text" id="acc-name" required class="w-full px-4 py-2.5 rounded-xl bg-brand-50 border border-brand-200 text-sm text-brand-900">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-brand-600 mb-1">Gmail / Email Address</label>
+                        <input type="email" id="acc-email" disabled class="w-full px-4 py-2.5 rounded-xl bg-gray-100 border border-brand-200 text-sm text-gray-500 cursor-not-allowed">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-brand-600 mb-1">Phone Number</label>
+                        <input type="tel" id="acc-phone" placeholder="9876543210" class="w-full px-4 py-2.5 rounded-xl bg-brand-50 border border-brand-200 text-sm text-brand-900">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-brand-600 mb-1">Shipping Address</label>
+                        <textarea id="acc-address" rows="3" placeholder="House No, Street, City, Pincode" class="w-full px-4 py-2.5 rounded-xl bg-brand-50 border border-brand-200 text-sm text-brand-900"></textarea>
+                    </div>
+                    <div class="pt-2 flex items-center justify-between">
+                        <button type="submit" class="px-6 py-3 bg-brand-900 hover:bg-brand-800 text-white font-bold rounded-xl shadow-md transition-all text-xs">
+                            Save Changes
+                        </button>
+                        <button type="button" onclick="toggleAccountModal()" class="px-4 py-3 bg-brand-100 hover:bg-brand-200 text-brand-900 font-semibold rounded-xl text-xs">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- SHOPPING CART DRAWER -->
+    <div id="cart-drawer" class="fixed inset-0 z-50 overflow-hidden hidden">
+        <div class="absolute inset-0 bg-black/40 backdrop-blur-sm transition-opacity" onclick="toggleCartDrawer(false)"></div>
+        <div class="absolute inset-y-0 right-0 max-w-full flex pl-10">
+            <div class="w-screen max-w-md bg-white shadow-2xl flex flex-col border-l border-brand-200">
+                <div class="p-6 bg-brand-900 text-white flex items-center justify-between border-b border-brand-800">
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-bag-shopping text-brand-200"></i>
+                        <h2 class="font-serif font-bold text-lg">Your Shopping Bag</h2>
+                    </div>
+                    <button onclick="toggleCartDrawer(false)" class="text-brand-200 hover:text-white p-2">
+                        <i class="fa-solid fa-xmark text-xl"></i>
+                    </button>
+                </div>
+                <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 space-y-4 divide-y divide-brand-100"></div>
+                <div id="cart-footer" class="p-6 bg-brand-100 border-t border-brand-200 space-y-4 hidden">
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between text-brand-600">
+                            <span>Subtotal</span>
+                            <span id="cart-subtotal" class="font-semibold text-brand-900">₹0</span>
+                        </div>
+                        <div class="flex justify-between text-brand-600">
+                            <span>Shipping</span>
+                            <span class="font-semibold text-brand-900">Free</span>
+                        </div>
+                        <div class="border-t border-brand-200 pt-2 flex justify-between text-base font-bold text-brand-900">
+                            <span>Total</span>
+                            <span id="cart-total" class="text-brand-700">₹0</span>
+                        </div>
+                    </div>
+                    <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-brand-900 hover:bg-brand-800 text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+                        <span>Proceed to Secure Checkout</span>
+                        <i class="fa-solid fa-lock text-xs text-brand-200"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CHECKOUT MODAL -->
+    <div id="checkout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-brand-200 relative">
+            <button onclick="closeCheckoutModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-brand-100 hover:bg-brand-200 text-brand-900 flex items-center justify-center transition-colors">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="p-8 space-y-6">
+                <div>
+                    <span class="text-xs uppercase tracking-[0.2em] font-bold text-brand-600">Secure Checkout</span>
+                    <h2 class="text-2xl font-serif font-bold text-brand-900">Shipping & Order Details</h2>
+                </div>
+                <form onsubmit="handleCheckoutSubmit(event)" class="space-y-4">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-brand-600 mb-1">Full Name</label>
+                            <input type="text" id="chk-name" required class="w-full px-4 py-2.5 rounded-xl bg-brand-50 border border-brand-200 text-sm text-brand-900">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-brand-600 mb-1">Phone Number</label>
+                            <input type="tel" id="chk-phone" required class="w-full px-4 py-2.5 rounded-xl bg-brand-50 border border-brand-200 text-sm text-brand-900">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-brand-600 mb-1">Delivery Address</label>
+                        <textarea id="chk-address" required rows="2" class="w-full px-4 py-2.5 rounded-xl bg-brand-50 border border-brand-200 text-sm text-brand-900"></textarea>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-brand-600 mb-1">Payment Method</label>
+                        <select id="chk-payment" class="w-full px-4 py-2.5 rounded-xl bg-brand-50 border border-brand-200 text-sm text-brand-900">
+                            <option value="UPI / Google Pay / PhonePe">UPI / Google Pay / PhonePe</option>
+                            <option value="Cash on Delivery (COD)">Cash on Delivery (COD)</option>
+                            <option value="Credit / Debit Card">Credit / Debit Card</option>
+                        </select>
+                    </div>
+                    <div class="p-4 bg-brand-100 rounded-2xl flex items-center justify-between">
+                        <span class="text-sm font-semibold text-brand-900">Total Amount:</span>
+                        <span id="chk-modal-total" class="text-lg font-bold text-brand-800 font-serif">₹0</span>
+                    </div>
+                    <button type="submit" class="w-full py-3.5 bg-brand-900 hover:bg-brand-800 text-white font-bold rounded-xl shadow-md">
+                        Place Order
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-brand-900 text-brand-200 pt-16 pb-12 border-t border-brand-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full overflow-hidden border border-brand-200 bg-white flex items-center justify-center shrink-0">
+                        <img src="logo.jpeg" alt="Logo" class="w-full h-full object-cover">
+                    </div>
+                    <span class="text-xl font-serif font-bold text-white tracking-wider">VASDHAVITRA</span>
+                </div>
+                <p class="text-xs text-brand-200 leading-relaxed font-light">
+                    A Woven Breeze. Handcrafted fabric hand fans made from upcycled sarees and surplus textiles. Breathe tradition, choose sustainability.
+                </p>
+            </div>
+            <div>
+                <h4 class="font-serif font-bold text-white text-base mb-4">Quick Links</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="#" onclick="showSection('home')" class="hover:text-white transition-colors">Home</a></li>
+                    <li><a href="#" onclick="showSection('shop')" class="hover:text-white transition-colors">The Collection</a></li>
+                    <li><a href="#" onclick="showSection('story')" class="hover:text-white transition-colors">Our Story</a></li>
+                    <li><a href="#" onclick="showSection('sustainability')" class="hover:text-white transition-colors">Sustainability</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-serif font-bold text-white text-base mb-4">Account & Portal</h4>
+                <ul class="space-y-2 text-xs">
+                    <li><a href="index.html" class="hover:text-white transition-colors"><i class="fa-solid fa-user mr-1 text-brand-200"></i> Consumer Login / Signup</a></li>
+                    <li><a href="admin-login.html" class="hover:text-white font-semibold transition-colors"><i class="fa-solid fa-shield-halved mr-1 text-brand-200"></i> Admin Portal Login</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-serif font-bold text-white text-base mb-4">Newsletter 🌿</h4>
+                <p class="text-xs text-brand-200 mb-3">Join our conscious community for upcycled textile drops.</p>
+                <div class="flex space-x-2">
+                    <input type="email" placeholder="Your email..." class="bg-brand-800 text-white px-3 py-2 rounded-xl text-xs border border-brand-700 focus:outline-none w-full">
+                    <button onclick="showToast('Thank you for joining our green community! 💚')" class="bg-brand-100 text-brand-900 px-4 py-2 rounded-xl text-xs font-bold shrink-0">Join</button>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 border-t border-brand-800 flex flex-col sm:flex-row items-center justify-between text-xs text-brand-300">
+            <p>&copy; 2026 VASDHAVITRA – A Woven Breeze. All rights reserved.</p>
+            <p class="mt-2 sm:mt-0">Crafted with sustainability & tradition 🪭💚</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        const DEFAULT_PRODUCTS = [
+            {
+                id: 'fan-1',
+                name: 'sunflower',
+                category: 'yellow',
+                price: 299,
+                rating: 4.9,
+                reviewsCount: 38,
+                image: 'https://img.kwcdn.com/product/21137b2350a/ab0bdff3-eb73-4395-9cb0-f39e8ebbf5ce_1000x1000.jpeg?imageView2/2/w/500/q/60/format/webp',
+                description: 'Exquisite hand-pleated fan crafted from royal blue Banarasi silk saree borders featuring intricate gold zari motifs and polished bamboo ribs.'
+            },
+            {
+                id: 'fan-2',
+                name: 'violet 1',
+                category: 'violet',
+                price: 349,
+                rating: 4.8,
+                reviewsCount: 24,
+                image: 'https://images.meesho.com/images/products/529414512/3skpd_512.webp?width=512',
+                description: 'Warm terracotta and forest green paisley prints upcycled from vintage cotton-silk sarees with authentic hand-stitched borders.'
+            },
+            {
+                id: 'fan-3',
+                name: 'red dragon',
+                category: 'red',
+                price: 349,
+                rating: 5.0,
+                reviewsCount: 56,
+                image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRpUJIM4uYbHW0RAXmbGEdFA25tlpuZj1Ow1EVwFwegIWhONNcHMCHt_UOL&s=10',
+                description: 'Vibrant multihued upcycled silk saree remnants featuring traditional geometrical Patola patterns and metallic gold zari weave.'
+            },
+            {
+                id: 'fan-4',
+                name: 'bluebird',
+                category: 'blue',
+                price: 349,
+                rating: 4.7,
+                reviewsCount: 42,
+                image: 'https://qwdirect.com.au/wp-content/uploads/2025/12/qwdcbhf-039-custom-printed-bamboo-accordion-fan-open.jpg',
+                description: 'Lightweight breathable Chanderi silk blend upcycled from festive surplus textiles. A sophisticated everyday cooling accessory.'
+            }
+        ];
+
+        let state = {
+            currentUser: JSON.parse(localStorage.getItem('vas_current_user')) || null,
+            cart: JSON.parse(localStorage.getItem('vas_cart')) || [],
+            products: JSON.parse(localStorage.getItem('vas_products')) || DEFAULT_PRODUCTS
+        };
+
+        window.onload = function() {
+            renderProducts('home-product-grid', state.products.slice(0, 4));
+            renderProducts('shop-product-grid', state.products);
+            updateCartUI();
+            updateUserNavUI();
+            showSection('home');
+        };
+
+        function showSection(sectionId) {
+            document.querySelectorAll('.page-section').forEach(sec => sec.classList.add('hidden'));
+            const target = document.getElementById(`section-${sectionId}`);
+            if (target) {
+                target.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            if (sectionId === 'orders') {
+                if (!state.currentUser) {
+                    showToast('Please sign in to view your orders.');
+                    window.location.href = 'index.html';
+                    return;
+                }
+                renderCustomerOrders();
+            }
+        }
+
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = 'bg-brand-900 text-brand-50 px-5 py-3 rounded-2xl shadow-2xl border border-brand-200/30 text-xs sm:text-sm font-medium flex items-center space-x-3 transform translate-y-2 opacity-0 transition-all duration-300';
+            toast.innerHTML = `<i class="fa-solid fa-fan text-accent-500 animate-spin" style="animation-duration: 4s;"></i><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => toast.classList.remove('translate-y-2', 'opacity-0'), 10);
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function renderProducts(containerId, list) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            if (list.length === 0) {
+                container.innerHTML = `<p class="col-span-full text-center text-brand-600 py-12">No hand fans found.</p>`;
+                return;
+            }
+
+            container.innerHTML = list.map(prod => `
+                <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl border border-brand-200 transition-all duration-300 flex flex-col group">
+                    <div class="relative aspect-square overflow-hidden bg-brand-100">
+                        <img src="${prod.image}" alt="${prod.name}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onerror="this.src='https://placehold.co/600x600/f4efe6/3e2723?text=Vasdhavitra'">
+                        <span class="absolute top-3 left-3 bg-brand-900/90 backdrop-blur-md text-brand-100 text-[10px] font-bold uppercase px-3 py-1 rounded-full border border-brand-200/30">Upcycled Saree</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between space-y-4">
+                        <div class="space-y-1">
+                            <div class="flex items-center justify-between text-xs text-brand-600">
+                                <span>${prod.category || 'Textile'}</span>
+                                <span class="flex items-center text-accent-600"><i class="fa-solid fa-star mr-1"></i>${prod.rating || '5.0'}</span>
+                            </div>
+                            <h3 class="font-serif font-bold text-lg text-brand-900">${prod.name}</h3>
+                            <p class="text-xs text-brand-600 line-clamp-2">${prod.description || prod.desc}</p>
+                        </div>
+                        <div class="flex items-center justify-between pt-4 border-t border-brand-100">
+                            <span class="text-xl font-bold font-serif text-brand-900">₹${prod.price}</span>
+                            <button onclick="addToCart('${prod.id}')" class="px-4 py-2.5 bg-brand-900 hover:bg-brand-800 text-white rounded-xl text-xs font-bold transition-all flex items-center space-x-2">
+                                <i class="fa-solid fa-bag-shopping"></i>
+                                <span>Add to Bag</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterProducts(cat) {
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.className = 'filter-btn px-5 py-2 rounded-full text-xs font-semibold bg-white text-brand-900 border border-brand-200 hover:border-brand-900 transition-all shadow-sm';
+            });
+            event.target.className = 'filter-btn px-5 py-2 rounded-full text-xs font-semibold bg-brand-900 text-white transition-all shadow-sm';
+
+            if (cat === 'all') {
+                renderProducts('shop-product-grid', state.products);
+            } else {
+                renderProducts('shop-product-grid', state.products.filter(p => (p.category || '').toLowerCase() === cat.toLowerCase()));
+            }
+        }
+
+        function toggleCartDrawer(isOpen) {
+            const drawer = document.getElementById('cart-drawer');
+            if (isOpen) {
+                drawer.classList.remove('hidden');
+                renderCartItems();
+            } else {
+                drawer.classList.add('hidden');
+            }
+        }
+
+        function addToCart(prodId) {
+            const prod = state.products.find(p => p.id === prodId);
+            if (!prod) return;
+
+            const existing = state.cart.find(item => item.product.id === prodId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                state.cart.push({ product: prod, quantity: 1 });
+            }
+
+            localStorage.setItem('vas_cart', JSON.stringify(state.cart));
+            updateCartUI();
+            showToast(`Added "${prod.name}" to shopping bag 🪭`);
+            toggleCartDrawer(true);
+        }
+
+        function updateCartQuantity(prodId, delta) {
+            const item = state.cart.find(i => i.product.id === prodId);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                state.cart = state.cart.filter(i => i.product.id !== prodId);
+            }
+            localStorage.setItem('vas_cart', JSON.stringify(state.cart));
+            renderCartItems();
+        }
+
+        function renderCartItems() {
+            const container = document.getElementById('cart-items-container');
+            const footer = document.getElementById('cart-footer') || createCartFooterElement();
+            const badge = document.getElementById('cart-badge');
+
+            const totalCount = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+            badge.innerText = totalCount;
+
+            if (state.cart.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-16 space-y-4">
+                        <div class="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center mx-auto text-2xl">
+                            <i class="fa-solid fa-bag-shopping"></i>
+                        </div>
+                        <p class="text-sm font-semibold text-brand-900">Your shopping bag is empty.</p>
+                    </div>
+                `;
+                footer.classList.add('hidden');
+                return;
+            }
+
+            footer.classList.remove('hidden');
+            let subtotal = 0;
+            container.innerHTML = state.cart.map(item => {
+                subtotal += item.product.price * item.quantity;
+                return `
+                    <div class="flex items-center space-x-4 py-4">
+                        <img src="${item.product.image}" class="w-16 h-16 rounded-2xl object-cover bg-brand-100 shrink-0">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-serif font-bold text-sm text-brand-900 truncate">${item.product.name}</h4>
+                            <p class="text-xs text-brand-600">₹${item.product.price} each</p>
+                            <div class="flex items-center space-x-3 mt-2">
+                                <button onclick="updateCartQuantity('${item.product.id}', -1)" class="w-6 h-6 rounded-lg bg-brand-100 font-bold text-brand-900">-</button>
+                                <span class="text-xs font-bold text-brand-900">${item.quantity}</span>
+                                <button onclick="updateCartQuantity('${item.product.id}', 1)" class="w-6 h-6 rounded-lg bg-brand-100 font-bold text-brand-900">+</button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-sm font-bold text-brand-900 font-serif">₹${item.product.price * item.quantity}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            document.getElementById('cart-subtotal').innerText = `₹${subtotal}`;
+            document.getElementById('cart-total').innerText = `₹${subtotal}`;
+        }
+
+        function createCartFooterElement() {
+            let f = document.getElementById('cart-footer');
+            if(!f) {
+                f = document.createElement('div');
+                f.id = 'cart-footer';
+                f.className = 'p-6 bg-brand-100 border-t border-brand-200 space-y-4';
+                f.innerHTML = `
+                    <div class="space-y-2 text-sm">
+                        <div class="flex justify-between text-brand-600"><span>Subtotal</span><span id="cart-subtotal" class="font-semibold text-brand-900">₹0</span></div>
+                        <div class="flex justify-between text-brand-600"><span>Shipping</span><span class="font-semibold text-brand-900">Free</span></div>
+                        <div class="border-t border-brand-200 pt-2 flex justify-between text-base font-bold text-brand-900"><span>Total</span><span id="cart-total" class="text-brand-700">₹0</span></div>
+                    </div>
+                    <button onclick="openCheckoutModal()" class="w-full py-3.5 bg-brand-900 hover:bg-brand-800 text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center space-x-2">
+                        <span>Proceed to Secure Checkout</span><i class="fa-solid fa-lock text-xs text-brand-200"></i>
+                    </button>
+                `;
+                document.querySelector('#cart-drawer > div').appendChild(f);
+            }
+            return f;
+        }
+
+        function updateCartUI() {
+            document.getElementById('cart-badge').innerText = state.cart.reduce((sum, item) => sum + item.quantity, 0);
+        }
+
+        function toggleUserDropdown() {
+            document.getElementById('user-dropdown').classList.toggle('hidden');
+        }
+
+        window.addEventListener('click', function(e) {
+            const container = document.getElementById('user-account-container');
+            if (container && !container.contains(e.target)) {
+                document.getElementById('user-dropdown').classList.add('hidden');
+            }
+        });
+
+        function updateUserNavUI() {
+            const nameSpan = document.getElementById('user-display-name');
+            const guestLinks = document.getElementById('dropdown-guest-links');
+            const userLinks = document.getElementById('dropdown-user-links');
+
+            guestLinks.classList.add('hidden');
+            userLinks.classList.add('hidden');
+
+            if (!state.currentUser) {
+                nameSpan.innerText = 'Account';
+                guestLinks.classList.remove('hidden');
+            } else {
+                nameSpan.innerText = (state.currentUser.name || 'User').split(' ')[0];
+                document.getElementById('dropdown-user-email').innerText = state.currentUser.email;
+                userLinks.classList.remove('hidden');
+            }
+        }
+
+        function toggleAccountModal() {
+            document.getElementById('user-dropdown').classList.add('hidden');
+            const modal = document.getElementById('account-modal');
+            modal.classList.toggle('hidden');
+
+            if (!modal.classList.contains('hidden') && state.currentUser) {
+                document.getElementById('acc-name').value = state.currentUser.name || '';
+                document.getElementById('acc-email').value = state.currentUser.email || '';
+                document.getElementById('acc-phone').value = state.currentUser.phone || '';
+                document.getElementById('acc-address').value = state.currentUser.address || '';
+            }
+        }
+
+        async function handleAccountUpdate(e) {
+            e.preventDefault();
+            if (!state.currentUser) return;
+
+            state.currentUser.name = document.getElementById('acc-name').value;
+            state.currentUser.phone = document.getElementById('acc-phone').value;
+            state.currentUser.address = document.getElementById('acc-address').value;
+
+            localStorage.setItem('vas_current_user', JSON.stringify(state.currentUser));
+
+            if (window.db) {
+                try {
+                    await window.firebaseSetDoc(window.firebaseDoc(window.db, "users", state.currentUser.email.toLowerCase()), state.currentUser);
+                } catch(err) { console.error(err); }
+            }
+
+            toggleAccountModal();
+            updateUserNavUI();
+            showToast('✅ Account details updated ');
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('vas_current_user');
+            state.currentUser = null;
+            updateUserNavUI();
+            showToast('Signed out successfully.');
+            showSection('home');
+        }
+
+        function openCheckoutModal() {
+            if (state.cart.length === 0) {
+                showToast('Your bag is empty.');
+                return;
+            }
+            if (!state.currentUser) {
+                showToast('Please sign in to proceed with checkout.');
+                toggleCartDrawer(false);
+                window.location.href = 'index.html';
+                return;
+            }
+
+            const subtotal = state.cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+            document.getElementById('chk-modal-total').innerText = `₹${subtotal}`;
+            document.getElementById('chk-name').value = state.currentUser.name || '';
+            document.getElementById('chk-phone').value = state.currentUser.phone || '';
+            document.getElementById('chk-address').value = state.currentUser.address || '';
+            
+            toggleCartDrawer(false);
+            document.getElementById('checkout-modal').classList.remove('hidden');
+        }
+
+        function closeCheckoutModal() {
+            document.getElementById('checkout-modal').classList.add('hidden');
+        }
+
+        async function handleCheckoutSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('chk-name').value;
+            const phone = document.getElementById('chk-phone').value;
+            const address = document.getElementById('chk-address').value;
+            const payment = document.getElementById('chk-payment').value;
+            const subtotal = state.cart.reduce((sum, item) => sum + (item.product.price * item.quantity), 0);
+
+            state.currentUser.name = name;
+            state.currentUser.phone = phone;
+            state.currentUser.address = address;
+            localStorage.setItem('vas_current_user', JSON.stringify(state.currentUser));
+
+            const newOrder = {
+                id: 'VAS-' + Math.floor(100000 + Math.random() * 900000),
+                date: new Date().toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }),
+                customer: { name, email: state.currentUser.email, phone, address },
+                items: [...state.cart],
+                total: subtotal,
+                payment,
+                status: 'Pending Confirmation'
+            };
+
+            if (window.db) {
+                try {
+                    await window.firebaseAddDoc(window.firebaseCollection(window.db, "orders"), newOrder);
+                } catch(e) { console.error(e); }
+            }
+
+            state.cart = [];
+            localStorage.setItem('vas_cart', JSON.stringify([]));
+            updateCartUI();
+
+            closeCheckoutModal();
+            showToast('🎉 Order placed successfully to Cloud! Awaiting admin confirmation.');
+            showSection('orders');
+        }
+
+        async function renderCustomerOrders() {
+            const container = document.getElementById('customer-orders-list');
+            if (!state.currentUser) return;
+
+            container.innerHTML = `<p class="text-xs text-brand-600">Loading orders from cloud...</p>`;
+
+            try {
+                const snap = await window.firebaseGetDocs(window.firebaseCollection(window.db, "orders"));
+                let userOrders = [];
+                snap.forEach(d => {
+                    let dat = d.data();
+                    if(dat.customer && dat.customer.email.toLowerCase() === state.currentUser.email.toLowerCase()) {
+                        userOrders.push(dat);
+                    }
+                });
+
+                if (userOrders.length === 0) {
+                    container.innerHTML = `
+                        <div class="bg-white rounded-3xl p-12 text-center space-y-4 border border-brand-200">
+                            <div class="w-16 h-16 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center mx-auto text-2xl">
+                                <i class="fa-solid fa-box-open"></i>
+                            </div>
+                            <h3 class="font-serif font-bold text-xl text-brand-900">No Orders Yet</h3>
+                            <button onclick="showSection('shop')" class="px-6 py-3 bg-brand-900 text-white font-bold rounded-xl text-xs">Explore Collection 🪭</button>
+                        </div>
+                    `;
+                    return;
+                }
+
+                container.innerHTML = userOrders.map(order => `
+                    <div class="bg-white rounded-3xl p-6 sm:p-8 shadow-sm border border-brand-200 space-y-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between border-b border-brand-100 pb-4 gap-2">
+                            <div>
+                                <span class="text-xs font-bold text-brand-700 uppercase tracking-wider">Order ID: ${order.id}</span>
+                                <p class="text-xs text-brand-600">Placed on ${order.date}</p>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <span class="px-3 py-1 bg-amber-50 text-amber-900 text-xs font-semibold rounded-full border border-amber-200">Status: ${order.status}</span>
+                                <span class="text-lg font-bold font-serif text-brand-900">₹${order.total}</span>
+                            </div>
+                        </div>
+                        <div class="space-y-4">
+                            <h4 class="text-xs font-bold uppercase tracking-wider text-brand-600">Items:</h4>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                ${order.items.map(i => `
+                                    <div class="flex items-center space-x-3 bg-brand-50 p-3 rounded-2xl border border-brand-200">
+                                        <img src="${i.product.image}" class="w-12 h-12 rounded-xl object-cover">
+                                        <div class="flex-1 min-w-0">
+                                            <p class="font-serif font-bold text-xs text-brand-900 truncate">${i.product.name}</p>
+                                            <p class="text-[11px] text-brand-600">Qty: ${i.quantity} × ₹${i.product.price}</p>
+                                        </div>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch(e) {
+                console.error(e);
+                container.innerHTML = `<p class="text-xs text-red-600">Failed to load orders from cloud.</p>`;
+            }
+        }
+    </script>
+</body>
+</html>

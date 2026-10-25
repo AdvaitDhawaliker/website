@@ -1,0 +1,153 @@
+
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | VASDHAVITRA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Firebase SDKs -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getFirestore, collection, getDocs, doc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAeS1uWLuEYaBLUeLm6vHUUXkjHxLzyK4g",
+            authDomain: "vasdhavitra.firebaseapp.com",
+            projectId: "vasdhavitra",
+            storageBucket: "vasdhavitra.firebasestorage.app",
+            messagingSenderId: "1088106081732",
+            appId: "1:1088106081732:web:8b9d6c2814dc31b1b20891"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.firebaseCollection = collection;
+        window.firebaseGetDocs = getDocs;
+        window.firebaseDoc = doc;
+        window.firebaseUpdateDoc = updateDoc;
+    </script>
+</head>
+<body class="bg-[#fcfbfa] text-[#3e2723] min-h-screen flex flex-col justify-between">
+
+    <header class="bg-[#3e2723] text-white py-4 px-6 flex items-center justify-between">
+        <h1 class="text-lg font-bold">Admin Portal - Cloud Firestore Synced</h1>
+        <a href="home.html" class="text-xs text-amber-200">← Back to Store</a>
+    </header>
+
+    <!-- Admin Login Screen -->
+    <main class="flex-grow flex items-center justify-center p-4" id="admin-login-wrapper">
+        <div class="bg-white rounded-3xl shadow-xl max-w-md w-full p-8 border">
+            <h2 class="text-2xl font-bold mb-4 font-serif">Admin Login</h2>
+            <form onsubmit="handleAdminLogin(event)" class="space-y-4">
+                <div><label class="text-xs font-semibold">Admin Email</label><input type="text" id="admin-user" required class="w-full p-3 border rounded-xl text-sm" value="admin@vasdhavitra.com"></div>
+                <div><label class="text-xs font-semibold">Password</label><input type="password" id="admin-pass" required class="w-full p-3 border rounded-xl text-sm" value="admin123"></div>
+                <button type="submit" class="w-full py-3 bg-[#3e2723] text-white font-bold rounded-xl shadow">Access Cloud Dashboard</button>
+            </form>
+        </div>
+    </main>
+
+    <!-- Dashboard View -->
+    <div id="admin-dashboard-view" class="hidden flex-grow max-w-7xl mx-auto w-full px-4 py-10 space-y-8">
+        <div class="bg-[#3e2723] text-white p-6 rounded-3xl flex justify-between items-center shadow-lg">
+            <h2 class="text-2xl font-bold font-serif">Live Cloud Database Manager</h2>
+            <button onclick="loadCloudData()" class="px-4 py-2 bg-[#795548] text-white rounded-xl text-xs font-bold">Sync from Cloud</button>
+        </div>
+
+        <!-- Verified Users Section -->
+        <div class="bg-white rounded-3xl p-6 shadow border">
+            <h3 class="text-lg font-bold mb-4 font-serif">Verified Registered Users (From Firestore Cloud)</h3>
+            <div id="adm-users-container" class="overflow-x-auto">Loading users...</div>
+        </div>
+
+        <!-- Orders Section -->
+        <div class="bg-white rounded-3xl p-6 shadow border">
+            <h3 class="text-lg font-bold mb-4 font-serif">Customer Orders & Status Management</h3>
+            <div id="adm-orders-container" class="overflow-x-auto">Loading orders...</div>
+        </div>
+    </div>
+
+    <footer class="bg-[#3e2723] text-white py-4 text-center text-xs">
+        &copy; 2026 VASDHAVITRA – Admin Portal
+    </footer>
+
+    <script>
+        function handleAdminLogin(e) {
+            e.preventDefault();
+            if(document.getElementById('admin-user').value === 'admin@vasdhavitra.com' && document.getElementById('admin-pass').value === 'admin123') {
+                document.getElementById('admin-login-wrapper').classList.add('hidden');
+                document.getElementById('admin-dashboard-view').classList.remove('hidden');
+                loadCloudData();
+            } else {
+                alert('Invalid credentials');
+            }
+        }
+
+        async function loadCloudData() {
+            if(!window.db) { alert('Firebase not loaded yet.'); return; }
+            
+            // Fetch users
+            try {
+                const userSnapshot = await window.firebaseGetDocs(window.firebaseCollection(window.db, "users"));
+                let usersList = [];
+                userSnapshot.forEach(doc => usersList.push(doc.data()));
+
+                document.getElementById('adm-users-container').innerHTML = usersList.length === 0 ? '<p class="text-xs text-gray-500">No users found in cloud.</p>' : `
+                    <table class="w-full text-left text-xs border-collapse">
+                        <tr class="border-b bg-gray-50"><th class="p-3">Name</th><th class="p-3">Email</th><th class="p-3">Phone</th><th class="p-3">Address</th></tr>
+                        ${usersList.map(u => `<tr class="border-b hover:bg-gray-50"><td class="p-3 font-bold">${u.name}</td><td class="p-3">${u.email}</td><td class="p-3">${u.phone || 'N/A'}</td><td class="p-3">${u.address || 'N/A'}</td></tr>`).join('')}
+                    </table>
+                `;
+            } catch(e) { console.error(e); }
+
+            // Fetch orders
+            try {
+                const orderSnapshot = await window.firebaseGetDocs(window.firebaseCollection(window.db, "orders"));
+                let ordersList = [];
+                orderSnapshot.forEach(doc => ordersList.push({ firebaseDocId: doc.id, ...doc.data() }));
+
+                document.getElementById('adm-orders-container').innerHTML = ordersList.length === 0 ? '<p class="text-xs text-gray-500">No orders found in cloud.</p>' : `
+                    <table class="w-full text-left text-xs border-collapse">
+                        <tr class="border-b bg-gray-50">
+                            <th class="p-3">Order ID</th>
+                            <th class="p-3">Customer</th>
+                            <th class="p-3">Total</th>
+                            <th class="p-3">Status</th>
+                            <th class="p-3">Confirm & Update Status</th>
+                        </tr>
+                        ${ordersList.map(o => `
+                            <tr class="border-b hover:bg-gray-50">
+                                <td class="p-3 font-bold">${o.id}</td>
+                                <td class="p-3">${o.customer ? o.customer.name : 'N/A'} (${o.customer ? o.customer.email : 'N/A'})<br>Ph: ${o.customer ? (o.customer.phone || 'N/A') : 'N/A'}</td>
+                                <td class="p-3 font-bold">₹${o.total}</td>
+                                <td class="p-3 font-semibold text-amber-800">${o.status}</td>
+                                <td class="p-3 space-x-1">
+                                    <button onclick="updateOrderStatus('${o.firebaseDocId}', 'Confirmed')" class="px-2.5 py-1.5 bg-emerald-700 text-white rounded text-[10px] font-bold shadow hover:bg-emerald-800 transition">Confirm Order</button>
+                                    <button onclick="updateOrderStatus('${o.firebaseDocId}', 'Shipped')" class="px-2.5 py-1.5 bg-[#795548] text-white rounded text-[10px] font-bold shadow hover:bg-[#5d4037] transition">Mark Shipped</button>
+                                    <button onclick="updateOrderStatus('${o.firebaseDocId}', 'Delivered')" class="px-2.5 py-1.5 bg-[#3e2723] text-white rounded text-[10px] font-bold shadow transition">Mark Delivered</button>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                `;
+            } catch(e) { console.error(e); }
+        }
+
+        async function updateOrderStatus(docId, newStatus) {
+            if(!window.db) return;
+            try {
+                await window.firebaseUpdateDoc(window.firebaseDoc(window.db, "orders", docId), { status: newStatus });
+                alert(`Order status successfully updated to: ${newStatus}!`);
+                loadCloudData();
+            } catch(e) { 
+                console.error(e);
+                alert('Failed to update order status.');
+            }
+        }
+    </script>
+</body>
+</html>
+
